@@ -14,11 +14,14 @@ def convertToString(dt):
     return utc
 
 
-currentDir=os.path.dirname(os.path.abspath(__file__))
-moduleNames=os.listdir(os.path.join(currentDir,'modules'))
+currentDir = os.path.dirname(os.path.abspath(__file__))
+pathToModules = os.path.join(currentDir, 'modules')
+moduleNames = (file for file in os.listdir(pathToModules)
+               if os.path.isfile(os.path.join(pathToModules,file)))
+
 moduleNames=['modules.' + s for s in moduleNames]
 
-moduleNames = [ name for name in moduleNames if not name.startswith('modules.__') ]
+moduleNames = [name for name in moduleNames if not name.startswith('modules.__') ]
 modules=[]
         
 for i in range(0,len(moduleNames)):
@@ -26,13 +29,13 @@ for i in range(0,len(moduleNames)):
     modules.append(__import__(moduleNames[i], fromlist=['']))    
     
 moduleInst=[]    
+print(modules)
 
 for module in modules:
     initModule=module.init_hook()
     moduleInst.append(initModule)
 
 params={'city':'Prague'}
-
 
 now=convertToString(datetime.datetime.now())
 timeTo=convertToString(datetime.datetime.now()+datetime.timedelta(days=4))

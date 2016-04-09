@@ -64,7 +64,9 @@ class Weather:
 
     def get_timeperiod_offset(timeIn,grain):
         t= timeIn[:-6] #Ignore timezone
+        timeZone=timeIn[-6:-3]
         utc = datetime.datetime.strptime(t, '%Y-%m-%dT%H:%M:%S.000')
+        utc = utc + datetime.timedelta(hours=int(timeZone))
         timeOffset=Weather.calculate_time_offset(utc)
 
         if ((grain == 'day') | (int(timeOffset['hours'])>48)) and int(timeOffset['days'])<7 :
